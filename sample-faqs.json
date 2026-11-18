@@ -1,0 +1,45 @@
+{
+  "note": "Beispieldaten aus dem Konzept der fiktiven Hochschule. Diese Datei wird von index.html nicht als Bot-Backend verwendet.",
+  "questions": [
+    {
+      "question": "Wie registriere ich mich für das erste Semester?",
+      "answer": "Die Registrierung erfolgt über das Online-Portal der Hochschule."
+    },
+    {
+      "question": "Welche Unterlagen brauche ich für die Einschreibung?",
+      "answer": "Personalausweis, Hochschulzugangsberechtigung, Krankenversicherungsnachweis."
+    },
+    {
+      "question": "Wie lange dauert das Praxissemester?",
+      "answer": "In der Regel ein Semester, genaue Angaben im Modulhandbuch."
+    },
+    {
+      "question": "Was passiert, wenn ich eine Prüfung nicht bestehe?",
+      "answer": "Du kannst sie zweimal wiederholen."
+    },
+    {
+      "question": "Wie funktioniert das BAföG?",
+      "answer": "BAföG kann online beim Amt für Ausbildungsförderung beantragt werden."
+    },
+    {
+      "question": "Was ist das Learning Management System (LMS)?",
+      "answer": "Ein digitales System zur Organisation von Lehrinhalten und Kurskommunikation."
+    },
+    {
+      "question": "Gibt es ein Mentorenprogramm?",
+      "answer": "Ja, für Erstsemester wird ein Mentoring durch höhere Semester angeboten."
+    },
+    {
+      "question": "Wie kann ich einen Bibliotheksausweis bekommen?",
+      "answer": "Mit deiner Immatrikulationsbescheinigung direkt in der Bibliothek."
+    },
+    {
+      "question": "Wo finde ich Prüfungsergebnisse?",
+      "answer": "Im Campus-Portal unter dem Menüpunkt „Notenübersicht“."
+    },
+    {
+      "question": "Kann ich ein Modul freiwillig wiederholen?",
+      "answer": "Ja, in Absprache mit dem Prüfungsamt ist das möglich."
+    }
+  ]
+}
