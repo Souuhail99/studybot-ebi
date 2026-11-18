@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="StudyBot – Hochschul-Chatbot (Studienprojekt EBI)" />
+  <title>StudyBot · Hochschul-Chatbot</title>
+  <style>
+    :root { font-family: system-ui, -apple-system, "Segoe UI", Arial, sans-serif; color-scheme: light; }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: #f2f6fb; color: #18263a; }
+    header { background: #12345b; color: #fff; padding: 23px max(24px, calc((100% - 960px)/2)); }
+    header h1 { font-size: 1.55rem; margin: 0 0 6px; }
+    header p { margin: 0; opacity: .84; }
+    main { max-width: 960px; margin: 24px auto; padding: 0 20px; }
+    .panel { background: #fff; border-radius: 14px; box-shadow: 0 7px 24px #19345716; overflow: hidden; }
+    .intro { padding: 16px 20px; border-bottom: 1px solid #e7edf5; }
+    .intro h2 { font-size: 1.13rem; margin: 0 0 5px; }
+    .intro p { margin: 0; font-size: .93rem; color: #4c5c70; }
+    #status { padding: 10px 20px; font-size: .91rem; color: #244a70; background: #edf5fe; }
+    #status[role="alert"] { color: #7f2626; background: #fff0ef; }
+    #webchat { height: min(67vh, 650px); min-height: 370px; width: 100%; }
+    #webchat:empty { display: grid; place-items: center; color: #53697d; text-align: center; padding: 20px; }
+    footer { color: #65748a; margin: 14px 2px 0; font-size: .85rem; line-height: 1.5; }
+    @media (max-width: 600px) { header { padding: 20px; } main { margin: 12px auto; padding: 0 12px; } }
+  </style>
+  <!-- Public Web Chat library. This is a reconstruction of a screenshot, not the original full source. -->
+  <script src="https://cdn.botframework.com/botframework-webchat/latest/webchat.js"></script>
+</head>
+<body>
+  <header>
+    <h1>🎓 StudyBot</h1>
+    <p>Hochschul-Chatbot · EBI-Studienprojekt</p>
+  </header>
+  <main>
+    <section class="panel" aria-label="Chatbot">
+      <div class="intro">
+        <h2>Hallo! Ich bin der StudyBot. Wie kann ich dir helfen?</h2>
+        <p>Stelle eine Frage zu Einschreibung, Prüfungen oder zum Hochschulalltag.</p>
+      </div>
+      <div id="status" aria-live="polite">Verbindung wird vorbereitet …</div>
+      <div id="webchat" role="main">Der Web Chat wird geladen …</div>
+    </section>
+    <footer>Demonstrationsfrontend. Antworten beziehen sich auf ein fiktives Hochschulszenario und sind keine verbindliche Studienberatung.</footer>
+  </main>
+
+  <script>
+    // Bereinigte Rekonstruktion des Codes aus dem vom Projektteam geteilten Screenshot.
+    // WICHTIG: Niemals den Direct-Line-SECRET im Browser-Code verwenden.
+    (async function () {
+      const status = document.getElementById('status');
+
+      const styleOptions = {
+        botAvatarInitials: 'SB',
+        userAvatarInitials: 'DU'
+      };
+
+      try {
+        if (!window.WebChat) throw new Error('Die Web-Chat-Bibliothek ist nicht geladen.');
+
+        // Der lokal laufende Beispielserver tauscht einen privaten Secret gegen einen Token.
+        const response = await fetch('/api/directline-token', { cache: 'no-store' });
+        if (!response.ok) throw new Error('Direct-Line-Token nicht verfügbar (HTTP ' + response.status + ').');
+        const { token } = await response.json();
+        if (!token) throw new Error('Es wurde kein Direct-Line-Token zurückgegeben.');
+
+        const store = window.WebChat.createStore({}, ({ dispatch }) => next => action => {
+          if (action.type === 'DIRECT_LINE/CONNECT_FULFILLED') {
+            dispatch({
+              type: 'WEB_CHAT/SEND_EVENT',
+              payload: {
+                name: 'webchat/join',
+                value: { language: 'de-DE' }
+              }
+            });
+            status.textContent = 'Verbunden. Du kannst jetzt eine Frage eingeben.';
+          }
+          return next(action);
+        });
+
+        // Im Screenshot wurde ein Secret direkt an createDirectLine() übergeben.
+        // Hier steht stattdessen ein temporärer Token aus dem Backend.
+        window.WebChat.renderWebChat(
+          {
+            directLine: window.WebChat.createDirectLine({ token }),
+            store,
+            locale: 'de-DE',
+            styleOptions
+          },
+          document.getElementById('webchat')
+        );
+      } catch (error) {
+        status.textContent = 'Keine Verbindung zum Bot. Prüfe den lokalen Server und die Azure-Direct-Line-Konfiguration.';
+        status.setAttribute('role', 'alert');
+        document.getElementById('webchat').textContent =
+          'Die Chat-Funktion benötigt einen aktiven Azure-Bot. Details findest du in docs/setup.md.';
+        console.error('StudyBot: Initialisierung fehlgeschlagen:', error.message);
+      }
+    })();
+  </script>
+</body>
+</html>

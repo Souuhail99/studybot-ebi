@@ -1,0 +1,13 @@
+{
+  "name": "studybot-azure-webchat-portfolio",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Local demonstration frontend for a university chatbot documented in an academic project",
+  "type": "module",
+  "scripts": {
+    "start": "node --env-file=.env server.mjs"
+  },
+  "engines": {
+    "node": ">=20.6.0"
+  }
+}

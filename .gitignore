@@ -1,0 +1,15 @@
+# Never publish credentials or private configuration
+.env
+.env.*
+!.env.example
+node_modules/
+.DS_Store
+Thumbs.db
+*.log
+logs/
+.azure/
+*.pem
+*.key
+*.pfx
+credentials*.json
+secrets*.json
